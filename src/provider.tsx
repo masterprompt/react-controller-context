@@ -7,12 +7,12 @@ interface Props<TController> extends ControllerProviderProps {
     options?: ControllerProviderOptions;
 }
 
-export function ControllerProvider<TController> (props: Props<TController>) {
+export function ControllerProvider<TController>(props: Props<TController>) {
     const {
         context: Context,
         useController,
         children,
-        options
+        options,
     } = props;
 
     const controller = useController(options);
@@ -22,4 +22,4 @@ export function ControllerProvider<TController> (props: Props<TController>) {
             {children}
         </Context.Provider>
     );
-};
+}

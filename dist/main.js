@@ -2809,9 +2809,9 @@ if (false) {} else {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createContextForController": () => (/* binding */ createContextForController)
+/* harmony export */   createContextForController: () => (/* binding */ createContextForController)
 /* harmony export */ });
-Object(function webpackMissingModule() { var e = new Error("Cannot find module './create-provider'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _create_provider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./create-provider */ "./src/create-provider.tsx");
 /* harmony import */ var _use_controller_from_context__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./use-controller-from-context */ "./src/use-controller-from-context.ts");
 /* harmony import */ var _create_controller_context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./create-controller-context */ "./src/create-controller-context.ts");
 
@@ -2820,11 +2820,10 @@ Object(function webpackMissingModule() { var e = new Error("Cannot find module '
 function createContextForController(useController) {
     var context = (0,_create_controller_context__WEBPACK_IMPORTED_MODULE_2__.createControllerContext)();
     return {
-        Provider: Object(function webpackMissingModule() { var e = new Error("Cannot find module './create-provider'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(context, useController),
-        useController: function () { return (0,_use_controller_from_context__WEBPACK_IMPORTED_MODULE_1__.useControllerFromContext)(context); }
+        Provider: (0,_create_provider__WEBPACK_IMPORTED_MODULE_0__.createControllerProvider)(context, useController),
+        useController: function () { return (0,_use_controller_from_context__WEBPACK_IMPORTED_MODULE_1__.useControllerFromContext)(context); },
     };
 }
-;
 
 
 /***/ }),
@@ -2837,13 +2836,68 @@ function createContextForController(useController) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createControllerContext": () => (/* binding */ createControllerContext)
+/* harmony export */   createControllerContext: () => (/* binding */ createControllerContext)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 function createControllerContext(defaultController) {
     return react__WEBPACK_IMPORTED_MODULE_0___default().createContext(defaultController || {});
+}
+
+
+/***/ }),
+
+/***/ "./src/create-provider.tsx":
+/*!*********************************!*\
+  !*** ./src/create-provider.tsx ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createControllerProvider: () => (/* binding */ createControllerProvider)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _provider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./provider */ "./src/provider.tsx");
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
+
+function createControllerProvider(context, useController) {
+    return function (props) { return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_provider__WEBPACK_IMPORTED_MODULE_1__.ControllerProvider, __assign({}, props, { context: context, useController: useController }))); };
+}
+
+
+/***/ }),
+
+/***/ "./src/provider.tsx":
+/*!**************************!*\
+  !*** ./src/provider.tsx ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ControllerProvider: () => (/* binding */ ControllerProvider)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function ControllerProvider(props) {
+    var Context = props.context, useController = props.useController, children = props.children, options = props.options;
+    var controller = useController(options);
+    return (react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Context.Provider, { value: controller }, children));
 }
 
 
@@ -2857,7 +2911,7 @@ function createControllerContext(defaultController) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "useControllerFromContext": () => (/* binding */ useControllerFromContext)
+/* harmony export */   useControllerFromContext: () => (/* binding */ useControllerFromContext)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
@@ -2957,7 +3011,7 @@ var __webpack_exports__ = {};
   \**********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createContextForController": () => (/* reexport safe */ _create_context_for_controller__WEBPACK_IMPORTED_MODULE_0__.createContextForController)
+/* harmony export */   createContextForController: () => (/* reexport safe */ _create_context_for_controller__WEBPACK_IMPORTED_MODULE_0__.createContextForController)
 /* harmony export */ });
 /* harmony import */ var _create_context_for_controller__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./create-context-for-controller */ "./src/create-context-for-controller.ts");
 

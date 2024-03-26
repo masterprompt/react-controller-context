@@ -1,13 +1,13 @@
 import {
-    ControllerProviderProps
+    ControllerProviderProps,
 } from './definitions';
 import React from 'react';
 
 import { ControllerProvider } from './provider';
 
-export function createControllerProvider<TController> (
+export function createControllerProvider<TController>(
     context: React.Context<TController>,
-    useController: () => TController
+    useController: () => TController,
 ): React.FC<ControllerProviderProps> {
     return (props: ControllerProviderProps) => (
         <ControllerProvider
@@ -16,4 +16,4 @@ export function createControllerProvider<TController> (
             useController={useController}
         />
     );
-};
+}

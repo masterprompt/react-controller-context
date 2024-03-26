@@ -13,8 +13,8 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
-    tsconfigRootDir: './',
-    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
+    project: './tsconfig.json',
   },
   plugins: [
     'import',
@@ -65,8 +65,8 @@ module.exports = {
     // https://github.com/typescript-eslint/typescript-eslint/blob/main/docs/linting/TROUBLESHOOTING.md#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
     'no-undef': 'off',
     'prefer-object-spread': 'off',
-    'indent': ['error', 4],
-    'react/jsx-indent': ['error', 4],
-    'react/jsx-indent-props': ['error', 4],
+    "indent": "off",
+    "@typescript-eslint/indent": ["error", 4],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
   },
 };

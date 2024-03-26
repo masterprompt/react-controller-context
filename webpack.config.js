@@ -51,7 +51,7 @@ const configs = {
     ],
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js', '.tsx'],
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
@@ -59,7 +59,7 @@ const configs = {
   plugins: [
     new webpack.BannerPlugin(license),
     new ESLintPlugin({
-      cache: true,
+      cache: false,
       eslintPath: require.resolve('eslint'),
       resolvePluginsRelativeTo: __dirname,
       ignore: true,
