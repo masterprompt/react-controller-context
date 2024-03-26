@@ -1,0 +1,54 @@
+{
+  "name": "@d2phap/npm-package-template",
+  "displayName": "NPM package template",
+  "version": "1.0.0",
+  "description": "NPM package template with Typescript, Webpack, SCSS, EsLint, Babel",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "webpack --watch --config ./webpack.config.js --progress --mode=development",
+    "build": "webpack --config ./webpack.config.js --progress --mode=production",
+    "test": ""
+  },
+  "keywords": [
+    "npm",
+    "npm-package",
+    "babel",
+    "typescript",
+    "eslint",
+    "webpack"
+  ],
+  "author": "Duong Dieu Phap",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/d2phap/npm-package-template/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/d2phap/npm-package-template.git"
+  },
+  "homepage": "https://github.com/d2phap/npm-package-template",
+  "devDependencies": {
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@typescript-eslint/eslint-plugin": "^5.59.0",
+    "@typescript-eslint/parser": "^5.59.0",
+    "babel-loader": "^9.1.2",
+    "clean-webpack-plugin": "*",
+    "css-loader": "^6.7.3",
+    "eslint": "^8.38.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-webpack-plugin": "^4.0.1",
+    "node-sass": "^8.0.0",
+    "sass-loader": "^13.2.2",
+    "ts-loader": "^9.4.2",
+    "tsconfig-paths-webpack-plugin": "^4.0.1",
+    "typescript": "^5.0.4",
+    "webpack": "^5.80.0",
+    "webpack-cli": "^5.0.1"
+  }
+}
