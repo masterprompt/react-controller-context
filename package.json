@@ -1,8 +1,8 @@
 {
-  "name": "@d2phap/npm-package-template",
-  "displayName": "NPM package template",
+  "name": "react-controller-context",
+  "displayName": "React Controller Context",
   "version": "1.0.0",
-  "description": "NPM package template with Typescript, Webpack, SCSS, EsLint, Babel",
+  "description": "Package to expose react memoized controllers to children via providers and context",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "files": [
@@ -14,26 +14,28 @@
     "test": ""
   },
   "keywords": [
-    "npm",
-    "npm-package",
-    "babel",
-    "typescript",
-    "eslint",
-    "webpack"
+    "react",
+    "controller",
+    "context",
+    "provider",
+    "memoize",
+    "state"
   ],
-  "author": "Duong Dieu Phap",
+  "author": "Casey Kerr",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/d2phap/npm-package-template/issues"
+    "url": "https://github.com/masterprompt/react-controller-context/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/d2phap/npm-package-template.git"
+    "url": "https://github.com/masterprompt/react-controller-context.git"
   },
-  "homepage": "https://github.com/d2phap/npm-package-template",
+  "homepage": "https://github.com/masterprompt/react-controller-context",
   "devDependencies": {
     "@babel/core": "^7.21.4",
     "@babel/preset-env": "^7.21.4",
+    "@types/react": "^18.2.71",
+    "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
     "babel-loader": "^9.1.2",
@@ -44,10 +46,12 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-webpack-plugin": "^4.0.1",
     "node-sass": "^8.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "sass-loader": "^13.2.2",
     "ts-loader": "^9.4.2",
     "tsconfig-paths-webpack-plugin": "^4.0.1",
-    "typescript": "^5.0.4",
+    "typescript": "^5.4.3",
     "webpack": "^5.80.0",
     "webpack-cli": "^5.0.1"
   }

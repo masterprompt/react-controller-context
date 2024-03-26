@@ -65,5 +65,8 @@ module.exports = {
     // https://github.com/typescript-eslint/typescript-eslint/blob/main/docs/linting/TROUBLESHOOTING.md#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
     'no-undef': 'off',
     'prefer-object-spread': 'off',
+    'indent': ['error', 4],
+    'react/jsx-indent': ['error', 4],
+    'react/jsx-indent-props': ['error', 4],
   },
 };
