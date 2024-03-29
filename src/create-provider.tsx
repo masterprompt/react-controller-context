@@ -1,10 +1,10 @@
 import React from 'react';
-import { Context, ProviderProps, Controller } from './definitions'
+import { Context, ProviderProps, Controller } from './definitions';
 import { InternalProvider } from './internal-provider';
 
-export function createControllerProvider<TController> (
+export function createControllerProvider<TController>(
     context: Context<TController>,
-    useController: Controller<TController>
+    useController: Controller<TController>,
 ) {
 
     //  The actual provider exposed to client once created
@@ -18,4 +18,4 @@ export function createControllerProvider<TController> (
 
     //  The actual provider exposed to client once created
     return Provider;
-};
+}
