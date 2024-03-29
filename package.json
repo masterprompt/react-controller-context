@@ -3,8 +3,8 @@
   "displayName": "React Controller Context",
   "version": "1.0.1",
   "description": "Package to expose react memoized controllers to children via providers and context",
-  "main": "dist/main.js",
-  "types": "dist/main.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],

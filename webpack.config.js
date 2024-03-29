@@ -24,7 +24,7 @@ const configs = {
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: 'main.js',
+    filename: 'index.js',
 
     library: {
       name: pkJson.name,

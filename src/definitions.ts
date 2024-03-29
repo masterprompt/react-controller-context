@@ -1,12 +1,10 @@
 import React from 'react';
 
-export type ControllerProviderOptions = object;
+export type ControllerOptions = object;
+export type Controller<TController> = (options?: ControllerOptions) => TController;
+export type Context<TController> = React.Context<TController>;
 
-export interface ControllerProviderProps {
+export interface ProviderProps {
     children: React.ReactNode;
-}
-
-export interface ControllerProviderContext<TController> {
-    Provider: React.FC<ControllerProviderProps>;
-    useController: (options?: ControllerProviderOptions) => TController;
+    options?: ControllerOptions;
 }
