@@ -32,6 +32,10 @@
     "url": "https://github.com/masterprompt/react-controller-context.git"
   },
   "homepage": "https://github.com/masterprompt/react-controller-context",
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.24.3",
     "@babel/preset-env": "^7.24.3",
@@ -47,8 +51,6 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-webpack-plugin": "^4.1.0",
     "node-sass": "^8.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "sass-loader": "^13.3.3",
     "ts-loader": "^9.5.1",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
