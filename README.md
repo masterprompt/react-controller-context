@@ -58,7 +58,7 @@ import { createContextForController } from 'react-controller-context'
 interface Options {
     initialFoo: 'foo'
 }
-const useFooState = (options: Options) => {
+const useFooState = (options?: Options) => {
     const [ foo, setFoo ] = React.useState(options.initialFoo);
     return {
         foo,
