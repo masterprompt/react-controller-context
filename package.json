@@ -1,7 +1,7 @@
 {
   "name": "react-controller-context",
   "displayName": "React Controller Context",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Package to expose react memoized controllers to children via providers and context",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
