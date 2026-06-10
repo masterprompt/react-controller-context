@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { createContextForController } from './create-context-for-controller';
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom';
 
 describe('createContextForController', () => {
     test('controller should be exposed via context', () => {
@@ -22,7 +22,7 @@ describe('createContextForController', () => {
         const { getByTestId } = render(
             <context.Provider>
                 <SampleComponent />
-            </context.Provider>
+            </context.Provider>,
         );
         expect(getByTestId('SampleComponent')).toBeInTheDocument();
         expect(getByTestId('SampleComponent')).toHaveTextContent('test');
@@ -63,7 +63,7 @@ describe('createContextForController', () => {
             foo: string;
         }
 
-        const useController = (options?: ControllerOptions): string => options?.foo || '';
+        const useController = (controllerOptions?: ControllerOptions): string => controllerOptions?.foo || '';
 
         const context = createContextForController(useController);
         
@@ -79,7 +79,7 @@ describe('createContextForController', () => {
         const { getByTestId } = render(
             <context.Provider options={options}>
                 <SampleComponent />
-            </context.Provider>
+            </context.Provider>,
         );
 
         expect(getByTestId('SampleComponent')).toBeInTheDocument();
