@@ -94,9 +94,9 @@ Required fields in the controller's props become required Provider props, and Ty
 const useAuth = ({ userId }: { userId: string }) => { /* ... */ };
 const Auth = createControllerContext(useAuth, 'Auth');
 
-<Auth.Provider userId="u-42">...</Auth.Provider>  // ✅
-<Auth.Provider>...</Auth.Provider>                // ❌ compile error: userId missing
-<Auth.Provider userid="u-42">...</Auth.Provider>  // ❌ compile error: typo caught
+<Auth.Provider userId="u-42">...</Auth.Provider>  // OK
+<Auth.Provider>...</Auth.Provider>                // compile error: userId missing
+<Auth.Provider userid="u-42">...</Auth.Provider>  // compile error: typo caught
 ```
 
 ### Composing multiple controller contexts
@@ -136,7 +136,7 @@ render(
 On React 19 you can read the context with the native `use()`, including conditionally:
 
 ```tsx
-const value = use(Counter.context);  // ⚠️ bypasses the missing-Provider guard
+const value = use(Counter.context);  // warning: bypasses the missing-Provider guard
 ```
 
 Prefer `Counter.use()` everywhere else; it is the one that throws a helpful error.
