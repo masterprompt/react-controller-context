@@ -1,2 +1,2 @@
-export { createContextForController } from './create-context-for-controller';
-export { createContextBundle } from './createContextBundle';
+export { createControllerContext } from './create-controller-context';
+export type { Controller } from './create-controller-context';

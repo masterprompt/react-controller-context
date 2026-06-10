@@ -1,0 +1,11 @@
+# Single factory API for 2.0: createControllerContext
+
+The 1.x API (`createContextForController`) typed controller arguments as `any` via an untyped `options` Provider prop, and its consumer hook silently returned a `{}` cast when used without a Provider. For 2.0.0 we replace it with a single export, `createControllerContext(controller, name?)`, returning `{ Provider, context, use }`, and delete both `createContextForController` and the never-published `createContextBundle`.
+
+## Considered Options
+
+- **Hook contract**: controllers must take a single object parameter; Provider props (minus `children`) are spread into it, so Provider prop types are inferred from the controller's signature. Rejected the 1.x `options` passthrough (untyped, nests every argument under one prop) — positional scalar parameters are unsupportable because JSX props cannot be mapped to parameter names.
+- **Orphan misuse**: `use()` throws a descriptive `Error` when called without a Provider above it. Rejected `console.error` + return `undefined` — destructuring would crash with a cryptic `TypeError` anyway while the log scrolls by. Detection uses a unique `Symbol` sentinel as the context default, so controllers that legitimately return falsy values (`0`, `''`, `false`, `null`) never false-positive (a bug the unpublished `createContextBundle` had with its `if (!ctx)` check).
+- **Consumer hook name**: `use`, aligning with React 19's `use(resource)` direction and reading naturally namespaced (`Counter.use()`). Rejected `useContext` (shadows React's hook when destructured, names the transport rather than the payload) and `useController` (imposes the "controller" noun on consumers). Known caveat: unlike React 19's `use`, ours wraps `useContext` (React 18 support) and remains a strict hook — no conditional calls.
+- **`name` argument**: optional, to keep the zero-config path frictionless. Errors and `displayName` fall back to the controller function's runtime `.name`, then a generic label; production minification may mangle the fallback, and anyone who cares (e.g. factory-pattern builders) passes an explicit name.
+- **Release**: 2.0.0 with the single export, no deprecated alias — the only known 1.0.8 consumers are the author's own projects, so a compatibility shim has no audience.

@@ -1,6 +1,6 @@
 # React Controller Context
 
-Generate a React Context + Provider pair from any controller hook using `createContextBundle` — the recommended API. Zero boilerplate, full type inference, and runtime safety out of the box.
+Generate a typed React Context + Provider pair from any controller hook with a single factory call: `createControllerContext`. Zero boilerplate, full type inference, runtime safety, zero dependencies.
 
 ## Installation
 
@@ -12,126 +12,163 @@ Peer dependencies: `react` 18 or 19.
 
 ## Quick Start
 
-### Simple controller (no props)
-
 ```tsx
-import { createContextBundle } from 'react-controller-context';
+import { createControllerContext } from 'react-controller-context';
 
-const useCounter = () => {
-    const [count, setCount] = React.useState(0);
+// 1. Write a controller — a hook that takes one props object
+const useCounter = ({ initialValue }: { initialValue?: number } = {}) => {
+    const [count, setCount] = React.useState(initialValue ?? 0);
     return { count, setCount };
 };
 
-const Counter = createContextBundle(useCounter, 'Counter');
+// 2. Create the controller context
+const Counter = createControllerContext(useCounter, 'Counter');
 
+// 3. Provide it — the Provider's props mirror your controller's props
 const App = () => (
-    <Counter.Provider>
+    <Counter.Provider initialValue={4}>
         <Display />
     </Counter.Provider>
 );
 
+// 4. Consume it anywhere underneath
 const Display = () => {
-    const { count, setCount } = Counter.useContext();
+    const { count, setCount } = Counter.use();
     return <button onClick={() => setCount(count + 1)}>{count}</button>;
 };
 ```
 
-### Controller with typed props
+## API
 
-Props passed to the Provider are forwarded to your hook automatically. TypeScript infers the prop types from your hook's parameter.
-
-```tsx
-import { createContextBundle } from 'react-controller-context';
-
-const useAuth = ({ initialUser }: { initialUser: string }) => {
-    const [user, setUser] = React.useState(initialUser);
-    return { user, setUser };
-};
-
-const Auth = createContextBundle(useAuth, 'Auth');
-
-const App = () => (
-    <Auth.Provider initialUser="Casey">
-        <Profile />
-    </Auth.Provider>
-);
-
-const Profile = () => {
-    const { user } = Auth.useContext();
-    return <span>{user}</span>;
-};
-```
-
-## API Reference
-
-### `createContextBundle(hook, name)` *(Recommended)*
-
-The preferred way to create context from a controller hook. Creates a typed context, Provider, and consumer hook in one call.
-
-**Parameters**
+### `createControllerContext(useController, name?)`
 
 | Param | Type | Description |
 |---|---|---|
-| `hook` | `(props: P) => R` | A controller hook. Its return value becomes the context value. Its parameter type determines the Provider's props. |
-| `name` | `string` | Display name used in React DevTools and error messages. |
+| `useController` | `(props: P) => R` | A controller hook. It must take a single props object (or nothing); its return value becomes the context value. |
+| `name` | `string` *(optional)* | Label for error messages and React DevTools. Falls back to the controller function's name, then a generic label. Pass it explicitly if the message must survive minification. |
 
-**Returns** an object with:
+**Returns** a controller context:
 
 | Key | Type | Description |
 |---|---|---|
-| `context` | `React.Context<R \| undefined>` | The raw React context (rarely needed directly). |
-| `Provider` | `React.FC<PropsWithChildren<P>>` | Renders the provider. All non-`children` props are forwarded to `hook`. |
-| `useContext` | `() => R` | Reads the context value. Throws if called outside the Provider. |
+| `Provider` | `React.FC<PropsWithChildren<P>>` | Forwards all non-`children` props to the controller and supplies its return value to descendants. Prop types are inferred from the controller's parameter. |
+| `use` | `() => R` | Returns the controller value from the nearest Provider. Throws a descriptive error when called without one. |
+| `context` | `React.Context<R>` | The raw context — an escape hatch for React 19's `use(context)` or injecting a mock value in tests. |
 
-**Runtime safety** — `useContext()` throws a descriptive error when called outside its Provider, making misuse easy to spot during development.
+### Runtime safety
 
-### `createContextForController(hook)` *(Deprecated)*
+Calling `use()` without a Provider above it throws immediately:
 
-The legacy API. Still exported for backwards compatibility, but `createContextBundle` is the recommended replacement. This API lacks typed provider props and runtime safety checks.
-
-```tsx
-import { createContextForController } from 'react-controller-context';
-
-const ctx = createContextForController(useMyHook);
-// ctx.Provider   — accepts `options` prop (untyped)
-// ctx.useController() — returns the hook's value (no throw guard)
+```
+Error: Counter cannot be used outside its Provider.
 ```
 
-**All new code should use `createContextBundle`.** See the [migration section](#migration-from-createcontextforcontroller) below if you're upgrading.
+Detection uses a unique sentinel, so controllers that legitimately return falsy values (`0`, `''`, `false`, `null`) work fine.
 
-## Migration from `createContextForController`
+> **Note** — despite the name, `use()` is a regular hook: call it at the top level of your component, not inside conditionals. (It wraps `useContext` for React 18 compatibility, so React 19's conditional-`use` superpower does not apply.)
 
-```tsx
-// Before
-const ctx = createContextForController(useMyHook);
-<ctx.Provider options={{ initialFoo: 'bar' }}>
-const value = ctx.useController();
+## Recipes
 
-// After
-const Bundle = createContextBundle(useMyHook, 'MyFeature');
-<Bundle.Provider initialFoo="bar">
-const value = Bundle.useContext();
-```
+### Controller with no props
 
-Key differences:
-- `name` parameter is required (used for DevTools and error messages).
-- Hook props are spread directly on the Provider instead of nested under `options`.
-- `useContext()` throws when called outside the Provider.
-
-## TypeScript
-
-Both APIs are fully typed. `createContextBundle` infers the Provider's props and context value from your hook signature — no manual generics needed.
+A controller can take no parameter at all — the Provider then accepts only `children`:
 
 ```tsx
-// TypeScript infers Provider accepts { initialCount: number }
-// and useContext() returns { count: number; increment: () => void }
-const useCounter = ({ initialCount }: { initialCount: number }) => {
-    const [count, setCount] = React.useState(initialCount);
-    return { count, increment: () => setCount((c) => c + 1) };
+const useTheme = () => {
+    const [dark, setDark] = React.useState(false);
+    return { dark, toggle: () => setDark(d => !d) };
 };
 
-const Counter = createContextBundle(useCounter, 'Counter');
+const Theme = createControllerContext(useTheme, 'Theme');
+
+<Theme.Provider>
+    <App />
+</Theme.Provider>
 ```
+
+### Required props
+
+Required fields in the controller's props become required Provider props — TypeScript enforces them at the call site:
+
+```tsx
+const useAuth = ({ userId }: { userId: string }) => { /* ... */ };
+const Auth = createControllerContext(useAuth, 'Auth');
+
+<Auth.Provider userId="u-42">...</Auth.Provider>  // ✅
+<Auth.Provider>...</Auth.Provider>                // ❌ compile error: userId missing
+<Auth.Provider userid="u-42">...</Auth.Provider>  // ❌ compile error: typo caught
+```
+
+### Composing multiple controller contexts
+
+Each controller context is independent — nest Providers freely. A later Provider's controller can even consume an earlier one:
+
+```tsx
+const useCart = () => {
+    const { userId } = Auth.use();   // controllers are hooks; they can use() other contexts
+    return useCartForUser(userId);
+};
+const Cart = createControllerContext(useCart, 'Cart');
+
+<Auth.Provider userId="u-42">
+    <Cart.Provider>
+        <Checkout />
+    </Cart.Provider>
+</Auth.Provider>
+```
+
+Nesting the *same* Provider twice follows normal React context rules: `use()` reads from the nearest one above.
+
+### Testing components without running the real controller
+
+The raw `context` lets tests inject a value directly, skipping the controller's state, effects, and network calls:
+
+```tsx
+render(
+    <Counter.context.Provider value={{ count: 99, setCount: jest.fn() }}>
+        <Display />
+    </Counter.context.Provider>,
+);
+```
+
+### React 19 escape hatch
+
+On React 19 you can read the context with the native `use()`, including conditionally:
+
+```tsx
+const value = use(Counter.context);  // ⚠️ bypasses the missing-Provider guard
+```
+
+Prefer `Counter.use()` everywhere else — it's the one that throws a helpful error.
+
+## Edge cases & gotchas
+
+- **`children` is reserved.** The Provider keeps `children` for the React tree and forwards everything else, so a controller prop named `children` will never arrive. Name it something else (`items`, `nodes`, …).
+- **Re-renders follow normal context rules.** Every `use()` consumer re-renders when the controller's return value changes identity. If your controller returns a fresh object each render, wrap it: `return React.useMemo(() => ({ count, setCount }), [count]);`
+- **One props object, not positional arguments.** A controller like `useThing(initialValue?: string)` can't be wired to JSX props — there's no runtime mapping from prop names to parameter positions. Take `{ initialValue }: { initialValue?: string }` instead.
+- **Minified error labels.** When `name` is omitted, the error/DevTools label falls back to the controller's runtime function name, which production minifiers may mangle. Pass an explicit `name` if you care about prod error messages.
+
+## Migrating from 1.x
+
+The 1.x export `createContextForController` was removed in 2.0.0.
+
+```tsx
+// 1.x
+const ctx = createContextForController(useMyHook);
+<ctx.Provider options={{ initialValue: '1234' }}>
+const value = ctx.useController();
+
+// 2.x
+const MyThing = createControllerContext(useMyHook, 'MyThing');
+<MyThing.Provider initialValue="1234">
+const value = MyThing.use();
+```
+
+Key changes:
+
+- Controllers must take a **single props object** (the 1.x `options` argument was untyped; provider props are now spread and fully typed by inference).
+- The consumer hook is named `use` and **throws** outside a Provider instead of silently returning an empty object.
+- An optional `name` powers error messages and DevTools.
 
 ## License
 
