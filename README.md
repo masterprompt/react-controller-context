@@ -101,23 +101,31 @@ const Auth = createControllerContext(useAuth, 'Auth');
 
 ### Composing multiple controller contexts
 
-Each controller context is independent, so nest Providers freely. A later Provider's controller can even consume an earlier one:
+Each controller context is independent, and a later Provider's controller can consume an earlier one. Rather than hand-nesting Providers, compose them with [`react-compose-provider`](https://github.com/masterprompt/react-compose-provider):
 
 ```tsx
+import { composeProvider } from 'react-compose-provider';
+
 const useCart = () => {
     const { userId } = Auth.use();   // controllers are hooks; they can use() other contexts
     return useCartForUser(userId);
 };
 const Cart = createControllerContext(useCart, 'Cart');
 
-<Auth.Provider userId="u-42">
-    <Cart.Provider>
+// First provider is outermost; providers needing props get a small wrapper
+const AppProviders = composeProvider(
+    ({ children }) => <Auth.Provider userId="u-42">{children}</Auth.Provider>,
+    Cart.Provider,
+);
+
+const App = () => (
+    <AppProviders>
         <Checkout />
-    </Cart.Provider>
-</Auth.Provider>
+    </AppProviders>
+);
 ```
 
-Nesting the *same* Provider twice follows normal React context rules: `use()` reads from the nearest one above.
+Mounting the *same* Provider twice follows normal React context rules: `use()` reads from the nearest one above.
 
 ### Testing components without running the real controller
 
