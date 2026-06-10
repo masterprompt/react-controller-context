@@ -6,7 +6,7 @@ export type Controller<R, P extends object = NoProps> =
     ((props: P) => R) | ((props?: P) => R);
 
 // P is extracted from the inferred function type rather than inferred directly
-// from the parameter position — direct inference collapses to the generic default
+// from the parameter position; direct inference collapses to the generic default
 // when the controller's props parameter is optional/defaulted, e.g. `(props = {}) => R`.
 type ControllerProps<C extends (props?: any) => any> =
     [Parameters<C>] extends [[]] ? NoProps : NonNullable<Parameters<C>[0]>;
@@ -30,7 +30,7 @@ const NO_PROVIDER = Symbol('react-controller-context.no-provider');
  *   its return value to descendants.
  * - `use()` returns the controller value from the nearest Provider, throwing a
  *   descriptive Error when no Provider is above the caller. Unlike React 19's
- *   `use`, it is a regular hook — top-level calls only.
+ *   `use`, it is a regular hook: top-level calls only.
  * - `context` is the raw React context, an escape hatch for `use(context)` in
  *   React 19 or injecting a mock value in tests.
  *

@@ -16,7 +16,7 @@ _Avoid_: options (the legacy 1.x passthrough prop)
 The generated component that calls the Controller with its own props (minus `children`) and supplies the result to descendants.
 
 **Controller Context**:
-The object returned by `createControllerContext(controller, name?)` — `{ Provider, context, use }`; when `name` is omitted, errors and displayName fall back to the controller's function name, then a generic label.
+The object returned by `createControllerContext(controller, name?)`: `{ Provider, context, use }`. When `name` is omitted, errors and displayName fall back to the controller's function name, then a generic label.
 _Avoid_: bundle, stack
 
 **use (consumer hook)**:
@@ -34,4 +34,4 @@ _Avoid_: silent undefined, console-only warning
 
 ## Flagged ambiguities
 
-- "options" (1.x API) vs spread props: resolved — Controller Props are spread directly on the Provider and typed by inference; the untyped `options` passthrough is the legacy pattern being replaced.
+- "options" (1.x API) vs spread props: resolved. Controller Props are spread directly on the Provider and typed by inference; the untyped `options` passthrough is the legacy pattern being replaced.

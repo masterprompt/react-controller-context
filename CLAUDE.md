@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-React Controller Context — a lightweight utility that generates React Context + Provider pairs from controller hooks. Single export: `createControllerContext(hook, name?)` returns `{ Provider, context, use }`.
+React Controller Context is a lightweight utility that generates React Context + Provider pairs from controller hooks. Single export: `createControllerContext(hook, name?)` returns `{ Provider, context, use }`.
 
 Domain language lives in `CONTEXT.md`; design decisions in `docs/adr/`.
 
@@ -12,17 +12,17 @@ Peer dependencies: React 18/19. Zero production dependencies.
 
 ## Commands
 
-- `npm test` — run Jest tests (jsdom environment)
-- `npm run build` — production webpack build (UMD output to `dist/`)
-- `npm start` — webpack watch mode (development)
-- `npm run lint` — ESLint with airbnb-typescript config
+- `npm test`: run Jest tests (jsdom environment)
+- `npm run build`: production webpack build (UMD output to `dist/`)
+- `npm start`: webpack watch mode (development)
+- `npm run lint`: ESLint with airbnb-typescript config
 
 ## Architecture
 
 All source is in `src/` (~80 lines of core code):
 
-- `index.ts` — re-exports `createControllerContext` and the `Controller` type
-- `create-controller-context.tsx` — the entire implementation: factory creates a React context with a `Symbol` sentinel default, returns `{ Provider, context, use }`
+- `index.ts`: re-exports `createControllerContext` and the `Controller` type
+- `create-controller-context.tsx`: the entire implementation. The factory creates a React context with a `Symbol` sentinel default and returns `{ Provider, context, use }`
 
 The flow: `createControllerContext(useMyHook, name?)` → creates `React.createContext` (sentinel default) → Provider spreads its non-`children` props into `useMyHook(props)` and supplies the result as context value → `use()` reads the context and throws a descriptive error (using `name`, falling back to the hook's function name) if the sentinel is still present, i.e. no Provider above.
 
@@ -46,7 +46,7 @@ Issues are tracked as local markdown files under `.scratch/<feature>/`. See `doc
 
 ### Triage labels
 
-Default vocabulary — the five canonical role names used as-is. See `docs/agents/triage-labels.md`.
+Default vocabulary: the five canonical role names used as-is. See `docs/agents/triage-labels.md`.
 
 ### Domain docs
 

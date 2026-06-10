@@ -26,6 +26,9 @@ jobs:
     needs: ci
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required for npm Trusted Publishing (OIDC)
     steps:
       - uses: actions/checkout@v4
 
@@ -34,6 +37,9 @@ jobs:
           node-version: 20
           cache: npm
           registry-url: https://registry.npmjs.org
+
+      # Trusted Publishing requires npm >= 11.5.1; node 20 ships npm 10
+      - run: npm install -g npm@latest
 
       - run: npm ci
       - run: npm run build
@@ -52,5 +58,3 @@ jobs:
       - name: Publish to npm
         if: steps.version-check.outputs.skip == 'false'
         run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

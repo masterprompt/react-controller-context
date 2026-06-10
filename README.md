@@ -15,7 +15,7 @@ Peer dependencies: `react` 18 or 19.
 ```tsx
 import { createControllerContext } from 'react-controller-context';
 
-// 1. Write a controller — a hook that takes one props object
+// 1. Write a controller: a hook that takes one props object
 const useCounter = ({ initialValue }: { initialValue?: number } = {}) => {
     const [count, setCount] = React.useState(initialValue ?? 0);
     return { count, setCount };
@@ -24,7 +24,7 @@ const useCounter = ({ initialValue }: { initialValue?: number } = {}) => {
 // 2. Create the controller context
 const Counter = createControllerContext(useCounter, 'Counter');
 
-// 3. Provide it — the Provider's props mirror your controller's props
+// 3. Provide it. The Provider's props mirror your controller's props
 const App = () => (
     <Counter.Provider initialValue={4}>
         <Display />
@@ -53,7 +53,7 @@ const Display = () => {
 |---|---|---|
 | `Provider` | `React.FC<PropsWithChildren<P>>` | Forwards all non-`children` props to the controller and supplies its return value to descendants. Prop types are inferred from the controller's parameter. |
 | `use` | `() => R` | Returns the controller value from the nearest Provider. Throws a descriptive error when called without one. |
-| `context` | `React.Context<R>` | The raw context — an escape hatch for React 19's `use(context)` or injecting a mock value in tests. |
+| `context` | `React.Context<R>` | The raw context, an escape hatch for React 19's `use(context)` or injecting a mock value in tests. |
 
 ### Runtime safety
 
@@ -65,13 +65,13 @@ Error: Counter cannot be used outside its Provider.
 
 Detection uses a unique sentinel, so controllers that legitimately return falsy values (`0`, `''`, `false`, `null`) work fine.
 
-> **Note** — despite the name, `use()` is a regular hook: call it at the top level of your component, not inside conditionals. (It wraps `useContext` for React 18 compatibility, so React 19's conditional-`use` superpower does not apply.)
+> **Note**: despite the name, `use()` is a regular hook. Call it at the top level of your component, not inside conditionals. (It wraps `useContext` for React 18 compatibility, so React 19's conditional-`use` superpower does not apply.)
 
 ## Recipes
 
 ### Controller with no props
 
-A controller can take no parameter at all — the Provider then accepts only `children`:
+A controller can take no parameter at all. The Provider then accepts only `children`:
 
 ```tsx
 const useTheme = () => {
@@ -88,7 +88,7 @@ const Theme = createControllerContext(useTheme, 'Theme');
 
 ### Required props
 
-Required fields in the controller's props become required Provider props — TypeScript enforces them at the call site:
+Required fields in the controller's props become required Provider props, and TypeScript enforces them at the call site:
 
 ```tsx
 const useAuth = ({ userId }: { userId: string }) => { /* ... */ };
@@ -101,7 +101,7 @@ const Auth = createControllerContext(useAuth, 'Auth');
 
 ### Composing multiple controller contexts
 
-Each controller context is independent — nest Providers freely. A later Provider's controller can even consume an earlier one:
+Each controller context is independent, so nest Providers freely. A later Provider's controller can even consume an earlier one:
 
 ```tsx
 const useCart = () => {
@@ -139,13 +139,13 @@ On React 19 you can read the context with the native `use()`, including conditio
 const value = use(Counter.context);  // ⚠️ bypasses the missing-Provider guard
 ```
 
-Prefer `Counter.use()` everywhere else — it's the one that throws a helpful error.
+Prefer `Counter.use()` everywhere else; it is the one that throws a helpful error.
 
 ## Edge cases & gotchas
 
-- **`children` is reserved.** The Provider keeps `children` for the React tree and forwards everything else, so a controller prop named `children` will never arrive. Name it something else (`items`, `nodes`, …).
+- **`children` is reserved.** The Provider keeps `children` for the React tree and forwards everything else, so a controller prop named `children` will never arrive. Name it something else (`items`, `nodes`, etc.).
 - **Re-renders follow normal context rules.** Every `use()` consumer re-renders when the controller's return value changes identity. If your controller returns a fresh object each render, wrap it: `return React.useMemo(() => ({ count, setCount }), [count]);`
-- **One props object, not positional arguments.** A controller like `useThing(initialValue?: string)` can't be wired to JSX props — there's no runtime mapping from prop names to parameter positions. Take `{ initialValue }: { initialValue?: string }` instead.
+- **One props object, not positional arguments.** A controller like `useThing(initialValue?: string)` can't be wired to JSX props because there is no runtime mapping from prop names to parameter positions. Take `{ initialValue }: { initialValue?: string }` instead.
 - **Minified error labels.** When `name` is omitted, the error/DevTools label falls back to the controller's runtime function name, which production minifiers may mangle. Pass an explicit `name` if you care about prod error messages.
 
 ## Migrating from 1.x
